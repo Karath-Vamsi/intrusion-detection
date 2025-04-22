@@ -5,6 +5,11 @@ import numpy as np
 import os
 from ultralytics import YOLO
 from utils import is_point_inside_polygon
+from playsound import playsound
+import threading
+
+def play_alert_sound():
+    threading.Thread(target=playsound, args=("sounds/alert3.mp3",), daemon=True).start()
 
 def run_intrusion_detection(video_path, zone_path):
     cap = cv2.VideoCapture(video_path)
@@ -46,6 +51,7 @@ def run_intrusion_detection(video_path, zone_path):
         cv2.polylines(frame, [zone], isClosed=True, color=(255, 0, 0), thickness=2)
 
         if alert:
+            play_alert_sound()
             cv2.putText(frame, "!!! INTRUSION ALERT !!!", (50, 50),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
 
